@@ -53,11 +53,11 @@ const TOOLS = [
   {
     name: "gb_comp_search_decisions",
     description:
-      "Full-text search across CMA enforcement decisions (abuse of dominance, cartel, sector inquiries). Returns matching decisions with case number, parties, outcome, fine amount, and GWB articles cited.",
+      "Full-text search across CMA enforcement decisions (abuse of dominance, cartel, sector inquiries). Returns matching decisions with case number, parties, outcome, fine amount, and CA98 provisions cited.",
     inputSchema: {
       type: "object" as const,
       properties: {
-        query: { type: "string", description: "Search query (e.g., 'Marktmissbrauch', 'Facebook', 'Preisabsprache')" },
+        query: { type: "string", description: "Search query (e.g., 'market abuse', 'Facebook', 'price-fixing')" },
         type: {
           type: "string",
           enum: ["abuse_of_dominance", "cartel", "merger", "sector_inquiry"],
@@ -77,11 +77,11 @@ const TOOLS = [
   {
     name: "gb_comp_get_decision",
     description:
-      "Get a specific Bundeskartellamt decision by case number (e.g., 'B6-22/16').",
+      "Get a specific CMA decision by case number (e.g., 'CE-9742/14').",
     inputSchema: {
       type: "object" as const,
       properties: {
-        case_number: { type: "string", description: "Case number (e.g., 'B6-22/16', 'B2-94/12')" },
+        case_number: { type: "string", description: "Case number (e.g., 'CE-9742/14', '50230')" },
       },
       required: ["case_number"],
     },
@@ -93,7 +93,7 @@ const TOOLS = [
     inputSchema: {
       type: "object" as const,
       properties: {
-        query: { type: "string", description: "Search query (e.g., 'Vonovia', 'Energieversorgung')" },
+        query: { type: "string", description: "Search query (e.g., 'Sky / Fox', 'JD Sports / Footasylum')" },
         sector: { type: "string", description: "Filter by sector ID. Optional." },
         outcome: {
           type: "string",
@@ -108,11 +108,11 @@ const TOOLS = [
   {
     name: "gb_comp_get_merger",
     description:
-      "Get a specific merger control decision by case number (e.g., 'B1-35/21').",
+      "Get a specific CMA merger control decision by case number (e.g., 'ME/6996/19').",
     inputSchema: {
       type: "object" as const,
       properties: {
-        case_number: { type: "string", description: "Merger case number (e.g., 'B1-35/21')" },
+        case_number: { type: "string", description: "CMA merger case number (e.g., 'ME/6996/19')" },
       },
       required: ["case_number"],
     },
@@ -121,6 +121,11 @@ const TOOLS = [
     name: "gb_comp_list_sectors",
     description:
       "List all sectors with CMA enforcement activity, including decision and merger counts.",
+    inputSchema: { type: "object" as const, properties: {}, required: [] },
+  },
+  {
+    name: "gb_comp_list_sources",
+    description: "List all data sources used by this MCP server, with URLs and descriptions.",
     inputSchema: { type: "object" as const, properties: {}, required: [] },
   },
   {
@@ -230,6 +235,43 @@ function createMcpServer(): Server {
         case "gb_comp_list_sectors": {
           const sectors = listSectors();
           return textContent({ sectors, count: sectors.length });
+        }
+
+        case "gb_comp_list_sources": {
+          return textContent({
+            sources: [
+              {
+                name: "CMA (Competition and Markets Authority)",
+                url: "https://www.gov.uk/cma",
+                description: "Enforcement decisions, market studies",
+              },
+              {
+                name: "CMA Merger Control",
+                url: "https://www.gov.uk/cma-cases",
+                description: "Merger reviews, phase 1 and 2 decisions",
+              },
+              {
+                name: "Competition Act 1998",
+                url: "https://www.legislation.gov.uk/",
+                description: "Chapter I (anti-competitive agreements), Chapter II (abuse of dominance)",
+              },
+              {
+                name: "Enterprise Act 2002",
+                url: "https://www.legislation.gov.uk/",
+                description: "Merger control, market investigation references",
+              },
+              {
+                name: "Consumer Rights Act 2015",
+                url: "https://www.legislation.gov.uk/",
+                description: "Consumer enforcement powers",
+              },
+              {
+                name: "OIM (Office for the Internal Market)",
+                url: "https://www.gov.uk/",
+                description: "Internal market assessments",
+              },
+            ],
+          });
         }
 
         case "gb_comp_about": {

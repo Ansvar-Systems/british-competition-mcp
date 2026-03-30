@@ -48,7 +48,7 @@ const TOOLS = [
   {
     name: "gb_comp_search_decisions",
     description:
-      "Full-text search across CMA enforcement decisions (abuse of dominance, cartel, sector inquiries). Returns matching decisions with case number, parties, outcome, fine amount, and GWB articles cited.",
+      "Full-text search across CMA enforcement decisions (abuse of dominance, cartel, sector inquiries). Returns matching decisions with case number, parties, outcome, fine amount, and CA98 provisions cited.",
     inputSchema: {
       type: "object" as const,
       properties: {
@@ -140,6 +140,15 @@ const TOOLS = [
     name: "gb_comp_list_sectors",
     description:
       "List all sectors with CMA enforcement activity, including decision counts and merger counts per sector.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {},
+      required: [],
+    },
+  },
+  {
+    name: "gb_comp_list_sources",
+    description: "List all data sources used by this MCP server, with URLs and descriptions.",
     inputSchema: {
       type: "object" as const,
       properties: {},
@@ -260,6 +269,43 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case "gb_comp_list_sectors": {
         const sectors = listSectors();
         return textContent({ sectors, count: sectors.length });
+      }
+
+      case "gb_comp_list_sources": {
+        return textContent({
+          sources: [
+            {
+              name: "CMA (Competition and Markets Authority)",
+              url: "https://www.gov.uk/cma",
+              description: "Enforcement decisions, market studies",
+            },
+            {
+              name: "CMA Merger Control",
+              url: "https://www.gov.uk/cma-cases",
+              description: "Merger reviews, phase 1 and 2 decisions",
+            },
+            {
+              name: "Competition Act 1998",
+              url: "https://www.legislation.gov.uk/",
+              description: "Chapter I (anti-competitive agreements), Chapter II (abuse of dominance)",
+            },
+            {
+              name: "Enterprise Act 2002",
+              url: "https://www.legislation.gov.uk/",
+              description: "Merger control, market investigation references",
+            },
+            {
+              name: "Consumer Rights Act 2015",
+              url: "https://www.legislation.gov.uk/",
+              description: "Consumer enforcement powers",
+            },
+            {
+              name: "OIM (Office for the Internal Market)",
+              url: "https://www.gov.uk/",
+              description: "Internal market assessments",
+            },
+          ],
+        });
       }
 
       case "gb_comp_about": {
