@@ -45,9 +45,9 @@ interface SectorRow {
 const sectors: SectorRow[] = [
   { id: "digital_economy", name: "Digital Economy", name_en: "Digital Economy", description: "Online platforms, social networks, app stores, and digital marketplaces.", decision_count: 2, merger_count: 1 },
   { id: "energy", name: "Energy", name_en: "Energy", description: "Electricity and gas supply, renewable energy, and energy networks.", decision_count: 1, merger_count: 1 },
-  { id: "retail", name: "Retail", name_en: "Retail", description: "Supermarkets, grocery retail, and consumer goods supply.", decision_count: 1, merger_count: 1 },
-  { id: "financial_services", name: "Financial Services", name_en: "Financial Services", description: "Banking, insurance, payment systems, and financial market infrastructure.", decision_count: 1, merger_count: 0 },
-  { id: "healthcare", name: "Healthcare", name_en: "Healthcare", description: "Hospitals, pharmaceuticals, medical devices, and private healthcare.", decision_count: 0, merger_count: 1 },
+  { id: "retail", name: "Retail", name_en: "Retail", description: "Supermarkets, grocery retail, and consumer goods supply.", decision_count: 2, merger_count: 1 },
+  { id: "financial_services", name: "Financial Services", name_en: "Financial Services", description: "Banking, insurance, payment systems, and financial market infrastructure.", decision_count: 1, merger_count: 1 },
+  { id: "healthcare", name: "Healthcare", name_en: "Healthcare", description: "Hospitals, pharmaceuticals, medical devices, and private healthcare.", decision_count: 1, merger_count: 1 },
   { id: "media", name: "Media", name_en: "Media", description: "Broadcasting, newspapers, streaming services, and news agencies.", decision_count: 1, merger_count: 1 },
 ];
 
@@ -149,6 +149,34 @@ const decisions: DecisionRow[] = [
     gb_law_articles: JSON.stringify(["Enterprise Act 2002 Part 4"]),
     status: "final",
   },
+  {
+    case_number: "MS-2023/1",
+    title: "Veterinary Services Market Study",
+    date: "2023-11-08",
+    type: "sector_inquiry",
+    sector: "healthcare",
+    parties: JSON.stringify(["CVS Group plc", "IVC Evidensia", "Medivet", "Vets4Pets", "VetPartners"]),
+    summary: "The CMA launched a market study into veterinary services in the UK following concerns about the consolidation of the sector and whether competition was working effectively for pet owners. The market study found issues with transparency, consolidation among large corporate groups, and limited consumer awareness.",
+    full_text: "The CMA conducted a market study into veterinary services in the UK under the Enterprise Act 2002. The study was prompted by concerns about the rapid consolidation of the veterinary sector, with large corporate groups acquiring independent practices, and whether this consolidation was harming competition and consumer outcomes. The market study examined: (1) the structure of veterinary services markets and the extent of corporate consolidation; (2) whether pet owners had sufficient information to make informed choices about veterinary services; (3) whether there were barriers to switching between veterinary practices; (4) the role of large corporate groups in setting prices and service quality. The CMA found that the market study revealed features of the market that may prevent, restrict or distort competition, including limited price transparency, low consumer awareness of ownership structures, and potential conflicts of interest in prescribing and dispensing medications. The CMA provisionally decided to make a market investigation reference to carry out a fuller Phase 2 merger review investigation into veterinary services.",
+    outcome: "cleared_with_conditions",
+    fine_amount: null,
+    gb_law_articles: JSON.stringify(["Enterprise Act 2002 Part 4"]),
+    status: "final",
+  },
+  {
+    case_number: "CE-50623/21",
+    title: "Fake Reviews Consumer Enforcement Investigation",
+    date: "2022-06-29",
+    type: "abuse_of_dominance",
+    sector: "retail",
+    parties: JSON.stringify(["Amazon EU SARL", "Google LLC"]),
+    summary: "The CMA opened a consumer enforcement investigation into Amazon and Google over concerns that they were not doing enough to protect consumers from fake reviews on their platforms. The investigation examined whether the platforms had adequate systems to detect, investigate, and remove fake or misleading reviews.",
+    full_text: "The CMA opened a consumer enforcement investigation into Amazon and Google under the Consumer Protection from Unfair Trading Regulations 2008 (CPRs) and the Enterprise Act 2002. The investigation focused on concerns that fake reviews were being hosted on the platforms and that the platforms' systems to detect and remove fake reviews were insufficient. Fake reviews mislead consumers into purchasing products or services that may be of lower quality or value than indicated by the reviews. The CMA was concerned that consumers were being harmed by: (1) businesses commissioning fake positive reviews for their own products or services; (2) businesses commissioning fake negative reviews for competitors; (3) the platforms failing to invest adequately in detection and removal of fake reviews. The consumer enforcement investigation examined whether Amazon and Google had complied with consumer protection law by taking adequate steps to identify and remove fake reviews. The CMA secured binding commitments from both Google and Amazon to take specific actions to improve their detection and removal of fake reviews, including implementing new technology-based detection systems and clearer processes for businesses to flag suspected fake reviews. The case represented a significant use of the CMA's consumer enforcement powers in the context of online platforms and digital consumer protection.",
+    outcome: "cleared_with_conditions",
+    fine_amount: null,
+    gb_law_articles: JSON.stringify(["Consumer Protection from Unfair Trading Regulations 2008", "Enterprise Act 2002 Part 8"]),
+    status: "final",
+  },
 ];
 
 const insertDecision = db.prepare(`
@@ -222,6 +250,18 @@ const mergers: MergerRow[] = [
     full_text: "The CMA reviewed Amazon's proposed minority investment in Deliveroo, the food delivery platform. The CMA was initially concerned that the investment could reduce competition in online restaurant food delivery in the UK and in food delivery services more broadly. Amazon had previously operated its own food delivery service in the UK (Amazon Restaurants) and remained a potential entrant in the market. In its Phase 2 investigation, the CMA considered whether Amazon would, absent the investment, re-enter the food delivery market as a significant competitor to Deliveroo. The CMA also considered the failing firm/exiting counterfactual — whether Deliveroo would have been able to survive as an independent business without Amazon's investment during the COVID-19 pandemic. The CMA concluded that, given the severe financial constraints faced by Deliveroo during the pandemic, there was a real risk that the company would exit the market if the investment did not proceed. In these circumstances, the CMA found that clearing the merger was appropriate even if Amazon would otherwise be a potential competitor, since the alternative was Deliveroo's exit from the market.",
     outcome: "cleared_phase1",
     turnover: 1000000000,
+  },
+  {
+    case_number: "ME/7023/21",
+    title: "Nationwide Building Society / Virgin Money UK plc",
+    date: "2024-03-07",
+    sector: "financial_services",
+    acquiring_party: "Nationwide Building Society",
+    target: "Virgin Money UK plc",
+    summary: "The CMA cleared Nationwide's proposed acquisition of Virgin Money after a Phase 1 merger review investigation. The CMA concluded that the merger was not expected to substantially lessen competition in personal current accounts, savings, mortgages, or other retail financial services in the UK.",
+    full_text: "The CMA conducted a Phase 1 merger review investigation into Nationwide Building Society's proposed acquisition of Virgin Money UK plc. Both Nationwide and Virgin Money provided a range of retail financial services products to consumers in the UK, including personal current accounts, savings accounts, mortgages, credit cards, and personal loans. The CMA examined whether the merger would substantially lessen competition in: (1) personal current accounts; (2) savings products; (3) residential mortgages; (4) credit cards and personal loans. The CMA assessed the competitive constraints available to customers post-merger, including the presence of major high street banks (Barclays, HSBC, Lloyds, NatWest, Santander), other challenger banks and building societies, and digital-only banks. The CMA found that: the combined Nationwide/Virgin Money entity would face substantial competition from multiple larger financial services providers; customers had significant ability to switch between providers; the financial services sector was subject to strong regulatory oversight from the FCA and PRA; and the merger was not expected to lead to a substantial lessening of competition in any relevant financial services market in the UK. The CMA cleared the merger at Phase 1 without conditions, concluding that the merger review process confirmed no substantive competition concerns in retail financial services.",
+    outcome: "cleared_phase1",
+    turnover: 5000000000,
   },
 ];
 
