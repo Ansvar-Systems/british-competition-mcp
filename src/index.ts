@@ -26,6 +26,7 @@ import {
   getMerger,
   listSectors,
 } from "./db.js";
+import { buildCitation } from './citation.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -243,7 +244,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         if (!decision) {
           return errorContent(`Decision not found: ${parsed.case_number}`);
         }
-        return textContent(decision);
+        return textContent({
+          ...(typeof decision === 'object' ? decision : { data: decision }),
+          _citation: buildCitation(
+            decision.case_number || parsed.case_number,
+            decision.title || decision.subject || parsed.case_number,
+            'gb_comp_get_decision',
+            { case_number: parsed.case_number },
+            decision.url || decision.source_url || null,
+          ),
+        });
       }
 
       case "gb_comp_search_mergers": {
@@ -263,7 +273,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         if (!merger) {
           return errorContent(`Merger case not found: ${parsed.case_number}`);
         }
-        return textContent(merger);
+        return textContent({
+          ...(typeof merger === 'object' ? merger : { data: merger }),
+          _citation: buildCitation(
+            merger.case_number || parsed.case_number,
+            merger.title || merger.subject || parsed.case_number,
+            'gb_comp_get_merger',
+            { case_number: parsed.case_number },
+            merger.url || merger.source_url || null,
+          ),
+        });
       }
 
       case "gb_comp_list_sectors": {
@@ -274,36 +293,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case "gb_comp_list_sources": {
         return textContent({
           sources: [
-            {
-              name: "CMA (Competition and Markets Authority)",
-              url: "https://www.gov.uk/cma",
-              description: "Enforcement decisions, market studies",
-            },
-            {
-              name: "CMA Merger Control",
-              url: "https://www.gov.uk/cma-cases",
-              description: "Merger reviews, phase 1 and 2 decisions",
-            },
-            {
-              name: "Competition Act 1998",
-              url: "https://www.legislation.gov.uk/",
-              description: "Chapter I (anti-competitive agreements), Chapter II (abuse of dominance)",
-            },
-            {
-              name: "Enterprise Act 2002",
-              url: "https://www.legislation.gov.uk/",
-              description: "Merger control, market investigation references",
-            },
-            {
-              name: "Consumer Rights Act 2015",
-              url: "https://www.legislation.gov.uk/",
-              description: "Consumer enforcement powers",
-            },
-            {
-              name: "OIM (Office for the Internal Market)",
-              url: "https://www.gov.uk/",
-              description: "Internal market assessments",
-            },
+            { name: "CMA (Competition and Markets Authority)", url: "https://www.gov.uk/cma", description: "Enforcement decisions, market studies" },
+            { name: "CMA Merger Control", url: "https://www.gov.uk/cma-cases", description: "Merger reviews, phase 1 and 2 decisions" },
+            { name: "Competition Act 1998", url: "https://www.legislation.gov.uk/", description: "Chapter I (anti-competitive agreements), Chapter II (abuse of dominance)" },
+            { name: "Enterprise Act 2002", url: "https://www.legislation.gov.uk/", description: "Merger control, market investigation references" },
+            { name: "Consumer Rights Act 2015", url: "https://www.legislation.gov.uk/", description: "Consumer enforcement powers" },
+            { name: "OIM (Office for the Internal Market)", url: "https://www.gov.uk/", description: "Internal market assessments" },
           ],
         });
       }
