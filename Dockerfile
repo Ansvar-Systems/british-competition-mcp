@@ -13,10 +13,12 @@ FROM node:20-slim AS builder
 
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci --ignore-scripts
+RUN npm ci --ignore-scripts && npm rebuild better-sqlite3
 COPY tsconfig.json ./
 COPY src/ src/
+COPY scripts/ scripts/
 RUN npm run build
+RUN npm run seed
 
 # --- Stage 2: Production ---
 FROM node:20-slim AS production
@@ -26,9 +28,11 @@ ENV NODE_ENV=production
 ENV CMA_DB_PATH=/app/data/cma.db
 
 COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
+RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force && \
+    npm rebuild better-sqlite3
 
 COPY --from=builder /app/dist/ dist/
+COPY --from=builder /app/data/ data/
 
 # Non-root user for security
 RUN addgroup --system --gid 1001 mcp && \
