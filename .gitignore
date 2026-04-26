@@ -25,6 +25,7 @@ yarn-error.log*
 # ───────────────────────────────────────────────────────────────────────────
 
 # Database — build artifact, regenerated from seed data via `npm run build:db`
+data/
 data/*.db
 data/*.db-journal
 data/*.db-wal
