@@ -118,6 +118,7 @@ export interface Decision {
   id: number;
   case_number: string;
   title: string;
+  subject?: string | null;
   date: string | null;
   type: string | null;
   sector: string | null;
@@ -128,12 +129,15 @@ export interface Decision {
   fine_amount: number | null;
   ca98_articles: string | null;
   status: string;
+  url?: string | null;
+  source_url?: string | null;
 }
 
 export interface Merger {
   id: number;
   case_number: string;
   title: string;
+  subject?: string | null;
   date: string | null;
   sector: string | null;
   acquiring_party: string | null;
@@ -142,6 +146,8 @@ export interface Merger {
   full_text: string;
   outcome: string | null;
   turnover: number | null;
+  url?: string | null;
+  source_url?: string | null;
 }
 
 export interface Sector {
