@@ -2,11 +2,11 @@
   "name": "@ansvar/british-competition-mcp",
   "version": "0.1.0",
   "mcpName": "eu.ansvar/british-competition-mcp",
-  "description": "CMA (Competition and Markets Authority) MCP server — competition law decisions, merger control, and sector enforcement",
+  "description": "CMA (Competition and Markets Authority) MCP server \u2014 competition law decisions, merger control, and sector enforcement",
   "type": "module",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "bin": {
-    "british-competition-mcp": "dist/src/index.js"
+    "british-competition-mcp": "dist/index.js"
   },
   "files": [
     "dist",
@@ -42,11 +42,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/http-server.ts",
-    "start": "node dist/src/http-server.js",
+    "start": "node dist/http-server.js",
     "seed": "npx tsx scripts/seed-sample.ts",
-    "ingest": "npx tsx scripts/ingest-cma.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test:contract": "echo \"No contract tests yet\" && exit 0"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.12",
